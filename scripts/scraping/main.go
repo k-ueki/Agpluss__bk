@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"net/url"
+	"strconv"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
 var endpoint string = "http://syllabus.aoyama.ac.jp/"
@@ -19,6 +20,9 @@ func main() {
 
 	etarget := "ctl00%24CPH1%24rptPagerT%24ctl03%24lnkPage"
 
+	// for i := 1; i <= 123; i++ {
+	i := 10
+	page := strconv.Itoa(i)
 	factor := make([][2]string, 30)
 	factor[0] = [2]string{"__EVENTTARGET", etarget}
 	factor[1] = [2]string{"__EVENTARGUMENT", ""}
@@ -47,7 +51,7 @@ func main() {
 	factor[24] = [2]string{"GKB", ""}
 	factor[25] = [2]string{"DL", "ja"}
 	factor[26] = [2]string{"ST", ""}
-	factor[27] = [2]string{"PG", "3"}
+	factor[27] = [2]string{"PG", page}
 	factor[28] = [2]string{"PC", "123"}
 	factor[29] = [2]string{"PI", "0"}
 
@@ -67,6 +71,13 @@ func main() {
 	}
 	defer resp.Body.Close()
 
-	bytes, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println(string(bytes))
+	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// bytes, _ := ioutil.ReadAll(resp.Body)
+	// fmt.Println(string(bytes))
+	// }
 }
