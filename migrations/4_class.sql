@@ -5,7 +5,10 @@ CREATE TABLE classes (
   semester VARCHAR(55) NOT NULL,
   credits INT(10) UNSIGNED NOT NULL,
   teacher VARCHAR(255) NOT NULL,
-  description VARCHAR(500),
+  description LONG,
+  year INT(10) UNSIGNED NOT NULL,
+  day_at VARCHAR(25) NOT NULL,
+  campus VARCHAR(55) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
