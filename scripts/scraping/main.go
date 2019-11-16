@@ -2,16 +2,46 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-	"net/url"
-	"strconv"
 
-	"github.com/PuerkitoBio/goquery"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
 )
+
+type Classes struct {
+	Name        string `db:"name"`
+	Semester    string `db:"semester"`
+	Credits     int    `db:"credits"`
+	Teacher     string `db:"teacher"`
+	Description string `db:"description"`
+	// Prerequisite string
+	// Evaluation string
+}
 
 var endpoint string = "http://syllabus.aoyama.ac.jp/"
 
+func gormConnect() *gorm.DB {
+	CONNECT := "root:@/agpluss"
+	db, err := gorm.Open("mysql", CONNECT)
+
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	return db
+}
+
 func main() {
+	db := gormConnect()
+	defer db.Close()
+
+	class := Classes{
+		Name:        "test",
+		Semester:    "前期",
+		Credits:     2,
+		Teacher:     "test!",
+		Description: "test",
+	}
+
 	_, err := url.Parse(endpoint)
 	if err != nil {
 		fmt.Println(err)
@@ -78,9 +108,19 @@ func main() {
 			return
 		}
 
-		selection := doc.Find("table.result > tbody > tr")
-		fmt.Println(selection.Text())
-		// bytes, _ := ioutil.ReadAll(resp.Body)
-		// fmt.Println("nya-nn", string(bytes))
+		selection := doc.Find("table.result > tbody > tr > td.col8 > a")
+
+		href, _ := selection.Attr("href")
+
+		res, err := http.Get(endpoint + href)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		defer res.Body.Close()
+
+		// fmt.Println("href", href)
+		bytes, _ := ioutil.ReadAll(res.Body)
+		fmt.Println("nya-nn", string(bytes))
 	}
 }
