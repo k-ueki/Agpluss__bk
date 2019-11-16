@@ -8,7 +8,7 @@ CREATE TABLE user (
   course_id int(10) UNSIGNED NOT NULL,
   ctime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  UNIQUE KEY `firebase_uid` (`firebase_uid`)
+  UNIQUE KEY `firebase_uid` (`firebase_uid`),
   FOREIGN KEY (dep_id) REFERENCES department(id),
   FOREIGN KEY (course_id) REFERENCES cource(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

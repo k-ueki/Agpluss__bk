@@ -7,7 +7,7 @@ CREATE TABLE review (
   evaluation INT(10) UNSIGNED NOT NULL,
   ctime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  FOREIGN KEY (class_id) REFERENCES class(id)
+  FOREIGN KEY (class_id) REFERENCES classes(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- +goose Down
